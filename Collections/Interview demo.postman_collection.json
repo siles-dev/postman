@@ -1,0 +1,119 @@
+{
+	"info": {
+		"_postman_id": "875ccf06-b2cb-4546-a67c-f2bc124a1728",
+		"name": "Interview demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26274973"
+	},
+	"item": [
+		{
+			"name": "Get JSON ex",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var testRailTestCase = \"SOME_TESTRAIL_TEST\" + \" \"",
+							"",
+							"if (responseCode.code === 200) {   ",
+							"    var res = JSON.parse(responseBody)    ",
+							"    ",
+							"    pm.test(testRailTestCase + \"We got some data...BooM, but does it have a 3\", function () {          ",
+							"        pm.expect(res.args).to.have.property(\"number\")",
+							"        //Looking for any number that has '3'",
+							"        pm.expect(res.args.number).to.contain(\"3\")",
+							"        console.log(res.args.number)",
+							"        pm.collectionVariables.set(\"someVariableWeWantToGet\", res.args.number)",
+							"    });",
+							"} else {",
+							"  if (responseCode.code === 204) {",
+							"",
+							"    pm.test(testRailTestCase + \"Got an empty response\", function () {",
+							"      pm.expect.fail(\"Got an empty response \")   ",
+							"    }); ",
+							"  }  else {",
+							"    var res = JSON.parse(responseBody)",
+							"    ",
+							"    pm.test(testRailTestCase + \"Verify GET /postman-echo.com/get - \", function () {    ",
+							"        throw new TypeError(JSON.stringify(res))   ",
+							"    });",
+							"  }",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test_JSON_data_url}}?number={{$randomInt}}",
+					"host": [
+						"{{test_JSON_data_url}}"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "{{$randomInt}}"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "API ver. XYZ",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{test_JSON_data_url}}?number={{$randomInt}}",
+							"host": [
+								"{{test_JSON_data_url}}"
+							],
+							"query": [
+								{
+									"key": "number",
+									"value": "{{$randomInt}}"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 14 Mar 2023 20:17:35 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "548"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"224-wkY36Apaok9wdfcQ2q3GVrPywR4\""
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"args\": {\n        \"number\": \"273\"\n    },\n    \"headers\": {\n        \"x-forwarded-proto\": \"http\",\n        \"x-forwarded-port\": \"80\",\n        \"host\": \"postman-echo.com\",\n        \"x-amzn-trace-id\": \"Root=1-6410d65f-43f6c8222a4978304d48db54\",\n        \"user-agent\": \"PostmanRuntime/7.31.1\",\n        \"accept\": \"*/*\",\n        \"postman-token\": \"1bab3b43-0990-4758-b21d-6d651ff7a111\",\n        \"accept-encoding\": \"gzip, deflate, br\",\n        \"cookie\": \"sails.sid=s%3ANqA8G-9i3uJek3bFuXtFfE4eSvbx3k-v.623WmkDBDv57Mcxc7uPzJcNjOr0JMERJH1gVGuQRZcU\"\n    },\n    \"url\": \"http://postman-echo.com/get?number=273\"\n}"
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "someVariableWeWantToGet",
+			"value": ""
+		}
+	]
+}
