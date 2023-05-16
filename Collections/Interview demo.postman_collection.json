@@ -7,7 +7,7 @@
 	},
 	"item": [
 		{
-			"name": "Get JSON ex",
+			"name": "Get JSON data example",
 			"event": [
 				{
 					"listen": "test",
@@ -58,7 +58,8 @@
 							"value": "{{$randomInt}}"
 						}
 					]
-				}
+				},
+				"description": "Adding a request description to help team mebers understand what a request is about.\n\n- This request hits postman's test API with a randomly generated number and extracts it to the variable `someVariableWeWantToGet`\n- Also illustratres the generic test template I use"
 			},
 			"response": [
 				{
@@ -108,6 +109,117 @@
 					"body": "{\n    \"args\": {\n        \"number\": \"273\"\n    },\n    \"headers\": {\n        \"x-forwarded-proto\": \"http\",\n        \"x-forwarded-port\": \"80\",\n        \"host\": \"postman-echo.com\",\n        \"x-amzn-trace-id\": \"Root=1-6410d65f-43f6c8222a4978304d48db54\",\n        \"user-agent\": \"PostmanRuntime/7.31.1\",\n        \"accept\": \"*/*\",\n        \"postman-token\": \"1bab3b43-0990-4758-b21d-6d651ff7a111\",\n        \"accept-encoding\": \"gzip, deflate, br\",\n        \"cookie\": \"sails.sid=s%3ANqA8G-9i3uJek3bFuXtFfE4eSvbx3k-v.623WmkDBDv57Mcxc7uPzJcNjOr0JMERJH1gVGuQRZcU\"\n    },\n    \"url\": \"http://postman-echo.com/get?number=273\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Use parameter from extracted response data ",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (responseCode.code === 200) {   ",
+							"    var res = JSON.parse(responseBody)    ",
+							"    //Get variables ",
+							"    var expectedNumber = pm.collectionVariables.get(\"someVariableWeWantToGet\")",
+							"    ",
+							"    pm.test(\"Making sure extracted data was sent \", function () {          ",
+							"        pm.expect(res.args).to.have.property(\"number\")",
+							"        //Changed test parameters ",
+							"        pm.expect(res.args.number).to.equal(expectedNumber)",
+							"    });",
+							"} else {",
+							"    var res = JSON.parse(responseBody)",
+							"    ",
+							"    pm.test(\"Verify GET /postman-echo.com/get with number 3 - \", function () {    ",
+							"        throw new TypeError(JSON.stringify(res))   ",
+							"    });",
+							"  }",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test_JSON_data_url}}?number={{someVariableWeWantToGet}}",
+					"host": [
+						"{{test_JSON_data_url}}"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "{{someVariableWeWantToGet}}"
+						}
+					]
+				},
+				"description": "Use the extracted `someVariableWeWantToGet` parameter in this request."
+			},
+			"response": []
+		},
+		{
+			"name": "Pre-request scrtipt",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"if (responseCode.code === 200) {   ",
+							"    var res = JSON.parse(responseBody)    ",
+							"    //Get variables ",
+							"    var expectedNumber = pm.collectionVariables.get(\"someVariableWeWantToGet\")",
+							"    ",
+							"    pm.test(\"Making sure extracted data was sent \", function () {          ",
+							"        pm.expect(res.args).to.have.property(\"number\")",
+							"        //Changed test parameters ",
+							"        pm.expect(res.args.number).to.equal(expectedNumber)",
+							"    });",
+							"} else {",
+							"    var res = JSON.parse(responseBody)",
+							"    ",
+							"    pm.test(\"Verify GET /postman-echo.com/get with number 3 - \", function () {    ",
+							"        throw new TypeError(JSON.stringify(res))   ",
+							"    });",
+							"  }",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Add a timeout before executing the request",
+							"  setTimeout(",
+							"      function () {pm.sendRequest()}, ",
+							"      20000); //Wait 20 sec  ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test_JSON_data_url}}?number={{someVariableWeWantToGet}}",
+					"host": [
+						"{{test_JSON_data_url}}"
+					],
+					"query": [
+						{
+							"key": "number",
+							"value": "{{someVariableWeWantToGet}}"
+						}
+					]
+				},
+				"description": "Demontrate the use of pre-request scripts in a request. this particular example adds a time out."
+			},
+			"response": []
 		}
 	],
 	"variable": [
