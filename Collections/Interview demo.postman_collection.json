@@ -42,6 +42,19 @@
 						],
 						"type": "text/javascript"
 					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//Generate UUID",
+							"var uuid = require('uuid')",
+							"",
+							"var randomUUID = uuid.v4()",
+							"//console.log(randomUUID)"
+						],
+						"type": "text/javascript"
+					}
 				}
 			],
 			"request": {
@@ -222,10 +235,35 @@
 			"response": []
 		}
 	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
 	"variable": [
 		{
 			"key": "someVariableWeWantToGet",
 			"value": ""
+		},
+		{
+			"key": "explicitCollectionVariable",
+			"value": "0",
+			"type": "string"
 		}
 	]
 }
